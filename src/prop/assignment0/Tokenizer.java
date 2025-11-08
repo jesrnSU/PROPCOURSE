@@ -42,7 +42,7 @@ public class Tokenizer implements ITokenizer {
     }
 
     private char ignoreWhitespace(char c) throws IOException{
-        while(c == '\n' | c == ' ' | c == '\r' | c == '\t'){
+        while(c == Scanner.NULL | c == '\n' | c == ' ' | c == '\r' | c == '\t'){
             scanner.moveNext();
             c = scanner.current();
         }

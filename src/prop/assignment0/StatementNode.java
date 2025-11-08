@@ -1,10 +1,6 @@
 package prop.assignment0;
 
-public class BlockNode implements INode{
-
-    public BlockNode(Lexeme lCurly, StatementNode sNode, Lexeme rCurly){
-        
-    }
+public class StatementNode implements INode{
 
     @Override
     public Object evaluate(Object[] args) throws Exception {
