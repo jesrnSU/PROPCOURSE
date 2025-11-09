@@ -2,6 +2,14 @@ package prop.assignment0;
 
 public class ExpressionNode implements INode{
 
+    public ExpressionNode(TermNode termNode){
+
+    }
+
+    public ExpressionNode(TermNode termNode, Lexeme operator, ExpressionNode expressionNode){
+
+    }
+
     @Override
     public Object evaluate(Object[] args) throws Exception {
         // TODO Auto-generated method stub

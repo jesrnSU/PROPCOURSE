@@ -5,16 +5,12 @@ import java.io.IOException;
 public class Parser implements IParser{
     private Tokenizer tokenizer;
     public Parser(){
-
         tokenizer = new Tokenizer();
-
     }
 
     @Override
     public void open(String fileName) throws IOException, TokenizerException {
-        // TODO Auto-generated method stub
         tokenizer.open(fileName);
-        
     }
 
     @Override
@@ -46,6 +42,7 @@ public class Parser implements IParser{
 
     private StatementNode procedureStatement() throws IOException, TokenizerException, ParserException{
         procedureAssignment();
+        procedureStatement();
         return null;
     }
 
@@ -75,17 +72,43 @@ public class Parser implements IParser{
             throw new ParserException("Semi");
         semi = tokenizer.current();
         return new AssignmentNode(id, assignSymbol, expressionNode, semi);
-
     }
 
     private ExpressionNode procedureExpression() throws IOException, TokenizerException, ParserException {
-        tokenizer.moveNext();
-        return null;
+        TermNode termNode;
+        Lexeme operator = null;
+        ExpressionNode expressionNode;
 
+        termNode = procedureTerm();
+        tokenizer.moveNext();
+
+        operator = tokenizer.current();
+        if(operator.token().equals(Token.ADD_OP) | operator.token().equals(Token.SUB_OP)){
+            expressionNode = procedureExpression();
+        }else{
+            return new ExpressionNode(termNode);
+        }
+
+        return new ExpressionNode(termNode, operator, expressionNode);
     }
 
     private TermNode procedureTerm() throws IOException, TokenizerException, ParserException{
-        return null;
+        
+        FactorNode factorNode;
+        Lexeme operator;
+        TermNode termNode;
+
+        factorNode = procedureFactor();
+        tokenizer.moveNext();
+
+        operator = tokenizer.current();
+        if(operator.token().equals(Token.MULT_OP) | operator.token().equals(Token.DIV_OP)){
+            termNode = procedureTerm();
+        }else{
+            return new TermNode();
+        }
+    
+        return new TermNode();
     }
 
     private FactorNode procedureFactor() throws IOException, TokenizerException, ParserException{
