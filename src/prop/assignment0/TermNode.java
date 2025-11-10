@@ -1,13 +1,47 @@
 package prop.assignment0;
 
-public class TermNode {
-
+public class TermNode implements INode{
+    private FactorNode factorNode;
+    private Lexeme operator;
+    private TermNode termNode;
 
     public TermNode(FactorNode factorNode){
-        
+        this.factorNode = factorNode;
     }
 
     public TermNode(FactorNode factorNode, Lexeme operator, TermNode termNode){
-        
+        this.factorNode = factorNode;
+        this.operator = operator;
+        this.termNode = termNode;
     }
+
+    @Override
+    public Object evaluate(Object[] args) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'evaluate'");
+    }
+
+    @Override
+    public void buildString(StringBuilder builder, int tabs) {
+        String stringTabs = BlockNode.tabBuilder(tabs);
+        tabs += 1;
+
+        builder.append(stringTabs + this.getClass().getSimpleName() + '\n');
+        stringTabs += '\t';
+
+        this.factorNode.buildString(builder, tabs);
+        if(this.operator != null && this.termNode != null){
+            builder.append(stringTabs + this.operator + '\n');
+            this.termNode.buildString(builder, tabs);
+        } 
+    }
+
+    // @Override 
+    // public String toString(){ 
+    //     if(termNode == null || operator == null){
+    //         return '\n' + factorNode.toString();
+    //     }else{
+    //         return '\n' + factorNode.toString() + operator.toString() + termNode.toString();
+    //     }
+    // }
 }

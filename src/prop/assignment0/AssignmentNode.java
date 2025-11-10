@@ -21,8 +21,19 @@ public class AssignmentNode implements INode{
 
     @Override
     public void buildString(StringBuilder builder, int tabs) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'buildString'");
+        String tab = BlockNode.tabBuilder(tabs);
+        builder.append(tab + this.getClass().getSimpleName() + '\n');
+
+        tab += '\t';
+        builder.append(tab + id.toString() + '\n'); 
+        builder.append(tab + assignSymbol.toString() + '\n');
+        expressionNode.buildString(builder, tabs + 1);
+        builder.append(tab + semiSymbol.toString());
     }
+
+    // @Override
+    // public String toString() {
+    //     return '\n' + id.toString() + assignSymbol.toString() + expressionNode.toString() + semiSymbol.toString();
+    // }
 
 }

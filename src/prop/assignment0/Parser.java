@@ -15,15 +15,15 @@ public class Parser implements IParser{
 
     @Override
     public INode parse() throws IOException, TokenizerException, ParserException {
-        tokenizer.moveNext();
-        INode startingNode = procedureBlock();
-        return startingNode;
+        return procedureBlock();
     }
 
     private BlockNode procedureBlock() throws IOException, TokenizerException, ParserException{
         Lexeme startSymbol = null;
         StatementNode statementNode = null;
         Lexeme endSymbol = null;
+
+        tokenizer.moveNext();
 
         if(tokenizer.current().token().equals(Token.LEFT_CURLY)){
             startSymbol = tokenizer.current();
@@ -36,7 +36,7 @@ public class Parser implements IParser{
 
         if(tokenizer.current().token().equals(Token.RIGHT_CURLY)){
             endSymbol = tokenizer.current();
-            tokenizer.moveNext();
+            System.out.println("GOt here");
             return new BlockNode(startSymbol, statementNode, endSymbol);
         }else{
             throw new ParserException("Expected right curly");
@@ -45,12 +45,14 @@ public class Parser implements IParser{
 
     private StatementNode procedureStatement() throws IOException, TokenizerException, ParserException{
         AssignmentNode assignmentNode;
+        StatementNode statementNode;
 
         if(tokenizer.current().token().equals(Token.RIGHT_CURLY)){
             return new StatementNode();
         }else{
             assignmentNode = procedureAssignment();
-            return new StatementNode(assignmentNode);
+            statementNode = procedureStatement();
+            return new StatementNode(assignmentNode, statementNode);
         }
     }
 
@@ -70,18 +72,16 @@ public class Parser implements IParser{
         if(tokenizer.current().token().equals(Token.ASSIGN_OP)){
             assignSymbol = tokenizer.current();
             tokenizer.moveNext();
-
             expressionNode = procedureExpression();
-            tokenizer.moveNext();
         }else{
             throw new ParserException("Expect =");
         }
 
         if(tokenizer.current().token().equals(Token.SEMICOLON)){
             semi = tokenizer.current();
+            tokenizer.moveNext();
             return new AssignmentNode(id, assignSymbol, expressionNode, semi);
         }else{
-            System.out.println(tokenizer.current().toString());
             throw new ParserException("Semi");
         }
     }
@@ -92,7 +92,6 @@ public class Parser implements IParser{
         ExpressionNode expressionNode;
 
         termNode = procedureTerm();
-        tokenizer.moveNext();
 
         operator = tokenizer.current();
         if(operator.token().equals(Token.ADD_OP) | operator.token().equals(Token.SUB_OP)){
@@ -110,7 +109,6 @@ public class Parser implements IParser{
         TermNode termNode;
 
         factorNode = procedureFactor();
-        tokenizer.moveNext();
 
         operator = tokenizer.current();
         if(operator.token().equals(Token.MULT_OP) | operator.token().equals(Token.DIV_OP)){
@@ -124,28 +122,31 @@ public class Parser implements IParser{
 
     private FactorNode procedureFactor() throws IOException, TokenizerException, ParserException{
         Lexeme factor = tokenizer.current();
+        Lexeme startParen;
         ExpressionNode expressionNode; 
+        Lexeme endParen;
 
-        System.out.println(factor.toString());
-        if(factor.token().equals(Token.INT_LIT) | factor.token().equals(Token.IDENT)){
+        if(factor.token().equals(Token.INT_LIT) || factor.token().equals(Token.IDENT)){
+            tokenizer.moveNext();
             return new FactorNode(factor);
         }else if(factor.token().equals(Token.LEFT_PAREN)){
-            expressionNode = procedureExpression();    
+            startParen = factor;
+            tokenizer.moveNext();
+            expressionNode = procedureExpression();
+            if(tokenizer.current().token().equals(Token.RIGHT_PAREN)){
+                endParen = tokenizer.current();
+                tokenizer.moveNext();
+                return new FactorNode(startParen, expressionNode, endParen); 
+            }else{
+                throw new ParserException("Expected )");
+            } 
         }else {
             throw new ParserException("Factor expectd");
         }
-
-        tokenizer.moveNext();
-        if(tokenizer.current().token().equals(Token.RIGHT_PAREN)){
-            return new FactorNode(factor, expressionNode, tokenizer.current());
-        }else{
-            throw new ParserException("Expected right paren");
-        }
-    }
+   }
 
     @Override
     public void close() throws IOException {
-        // TODO Auto-generated method stub
         tokenizer.close();
     }
 }

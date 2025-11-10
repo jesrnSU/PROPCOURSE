@@ -23,16 +23,16 @@ public class Program {
 				parser = new Parser();
 				parser.open(inputFileName);
 				root = parser.parse();
-				/*builder = new StringBuilder();
+				builder = new StringBuilder();
 				builder.append("PARSE TREE:\n");
 				root.buildString(builder, 0);
+				/* 
 				builder.append("\nEVALUATION:\n");
 				builder.append(root.evaluate(null));
-				
+				*/
 				stream = new FileOutputStream(outputFileName);
 				writer = new OutputStreamWriter(stream);
 				writer.write(builder.toString());
-				*/
 			}
 			catch (Exception exception) {
 				System.out.println("EXCEPTION: " + exception);
