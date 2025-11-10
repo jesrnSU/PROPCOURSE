@@ -1,7 +1,6 @@
 package prop.assignment0;
 
 public class FactorNode implements INode{
-
     private Lexeme factor; 
     private Lexeme leftParen;
     private ExpressionNode expressionNode;

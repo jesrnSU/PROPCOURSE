@@ -1,11 +1,11 @@
 package prop.assignment0;
 
 public class BlockNode implements INode{
-    Lexeme leftCurly;
-    StatementNode statementNode;
-    Lexeme rightCurly;
+    private Lexeme leftCurly;
+    private StatementsNode statementNode;
+    private Lexeme rightCurly;
 
-    public BlockNode(Lexeme lCurly, StatementNode sNode, Lexeme rCurly){
+    public BlockNode(Lexeme lCurly, StatementsNode sNode, Lexeme rCurly){
         leftCurly = lCurly;
         statementNode = sNode;
         rightCurly = rCurly;
