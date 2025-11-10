@@ -20,7 +20,7 @@ public class Parser implements IParser{
 
     private BlockNode procedureBlock() throws IOException, TokenizerException, ParserException{
         Lexeme startSymbol = null;
-        StatementNode statementNode = null;
+        StatementsNode statementNode = null;
         Lexeme endSymbol = null;
 
         tokenizer.moveNext();
@@ -36,23 +36,22 @@ public class Parser implements IParser{
 
         if(tokenizer.current().token().equals(Token.RIGHT_CURLY)){
             endSymbol = tokenizer.current();
-            System.out.println("GOt here");
             return new BlockNode(startSymbol, statementNode, endSymbol);
         }else{
-            throw new ParserException("Expected right curly");
+            throw new ParserException("Expected " + Token.RIGHT_CURLY + " but got " + tokenizer.current().toString());
         }
     }
 
-    private StatementNode procedureStatement() throws IOException, TokenizerException, ParserException{
+    private StatementsNode procedureStatement() throws IOException, TokenizerException, ParserException{
         AssignmentNode assignmentNode;
-        StatementNode statementNode;
+        StatementsNode statementNode;
 
         if(tokenizer.current().token().equals(Token.RIGHT_CURLY)){
-            return new StatementNode();
+            return new StatementsNode();
         }else{
             assignmentNode = procedureAssignment();
             statementNode = procedureStatement();
-            return new StatementNode(assignmentNode, statementNode);
+            return new StatementsNode(assignmentNode, statementNode);
         }
     }
 
@@ -74,7 +73,7 @@ public class Parser implements IParser{
             tokenizer.moveNext();
             expressionNode = procedureExpression();
         }else{
-            throw new ParserException("Expect =");
+            throw new ParserException("Expected " + Token.ASSIGN_OP + " but got " + tokenizer.current().toString());
         }
 
         if(tokenizer.current().token().equals(Token.SEMICOLON)){
@@ -82,7 +81,7 @@ public class Parser implements IParser{
             tokenizer.moveNext();
             return new AssignmentNode(id, assignSymbol, expressionNode, semi);
         }else{
-            throw new ParserException("Semi");
+            throw new ParserException("Expected " + Token.SEMICOLON + " but got " + tokenizer.current().toString());
         }
     }
 
@@ -94,7 +93,7 @@ public class Parser implements IParser{
         termNode = procedureTerm();
 
         operator = tokenizer.current();
-        if(operator.token().equals(Token.ADD_OP) | operator.token().equals(Token.SUB_OP)){
+        if(operator.token().equals(Token.ADD_OP) || operator.token().equals(Token.SUB_OP)){
             tokenizer.moveNext();
             expressionNode = procedureExpression();
             return new ExpressionNode(termNode, operator, expressionNode);
@@ -138,10 +137,10 @@ public class Parser implements IParser{
                 tokenizer.moveNext();
                 return new FactorNode(startParen, expressionNode, endParen); 
             }else{
-                throw new ParserException("Expected )");
+                throw new ParserException("Expected " + Token.RIGHT_CURLY + " but got " + tokenizer.current().toString());
             } 
         }else {
-            throw new ParserException("Factor expectd");
+            throw new ParserException("Expected either " + Token.INT_LIT + ", " +  Token.IDENT + " or " + Token.LEFT_PAREN + " but got " + tokenizer.current().toString());
         }
    }
 

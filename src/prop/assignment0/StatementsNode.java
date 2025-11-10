@@ -1,14 +1,14 @@
 package prop.assignment0;
 
-public class StatementNode implements INode{
+public class StatementsNode implements INode{
     private AssignmentNode assignmentNode;
-    private StatementNode statementNode;
+    private StatementsNode statementNode;
 
-    public StatementNode(){
+    public StatementsNode(){
 
     }
 
-    public StatementNode(AssignmentNode assignmentNode, StatementNode statementNode){
+    public StatementsNode(AssignmentNode assignmentNode, StatementsNode statementNode){
         this.assignmentNode = assignmentNode;
         this.statementNode = statementNode;
     }
