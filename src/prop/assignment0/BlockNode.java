@@ -1,9 +1,14 @@
 package prop.assignment0;
 
 public class BlockNode implements INode{
+    Lexeme leftCurly;
+    StatementNode statementNode;
+    Lexeme rightCurly;
 
     public BlockNode(Lexeme lCurly, StatementNode sNode, Lexeme rCurly){
-        
+        leftCurly = lCurly;
+        statementNode = sNode;
+        rightCurly = rCurly;
     }
 
     @Override
@@ -14,8 +19,7 @@ public class BlockNode implements INode{
 
     @Override
     public void buildString(StringBuilder builder, int tabs) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'buildString'");
+        builder.append("");
     }
 
 }

@@ -2,6 +2,14 @@ package prop.assignment0;
 
 public class StatementNode implements INode{
 
+    public StatementNode(){
+
+    }
+    
+    public StatementNode(AssignmentNode assignmentNode){
+
+    }
+
     @Override
     public Object evaluate(Object[] args) throws Exception {
         // TODO Auto-generated method stub

@@ -2,6 +2,14 @@ package prop.assignment0;
 
 public class FactorNode implements INode{
 
+    public FactorNode(Lexeme lexeme){
+
+    }
+
+    public FactorNode(Lexeme left, ExpressionNode expressionNode, Lexeme right){
+        
+    }
+
     @Override
     public Object evaluate(Object[] args) throws Exception {
         // TODO Auto-generated method stub
