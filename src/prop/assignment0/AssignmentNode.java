@@ -15,8 +15,10 @@ public class AssignmentNode implements INode{
 
     @Override
     public Object evaluate(Object[] args) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'evaluate'");
+        StringBuilder result = new StringBuilder(); 
+        result.append(this.id + " " + this.assignSymbol);
+        result.append(this.expressionNode.evaluate(args));
+        return result.toString();
     }
 
     @Override

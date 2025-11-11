@@ -15,8 +15,14 @@ public class StatementsNode implements INode{
 
     @Override
     public Object evaluate(Object[] args) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'evaluate'");
+        StringBuilder result = new StringBuilder();
+
+        if(this.assignmentNode != null && this.statementNode != null){
+            result.append(this.assignmentNode.evaluate(args)); 
+            result.append("\n");
+            result.append(this.statementNode.evaluate(args));
+        }
+        return result.toString();
     }
 
     @Override

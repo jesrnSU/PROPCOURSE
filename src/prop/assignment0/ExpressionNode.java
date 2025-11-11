@@ -19,8 +19,13 @@ public class ExpressionNode implements INode{
 
     @Override
     public Object evaluate(Object[] args) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'evaluate'");
+        StringBuilder result = new StringBuilder(); 
+        result.append(this.termNode.evaluate(args));
+        if(this.operator != null && this.expressionNode != null){
+            result.append(this.operator.value());
+            result.append(this.expressionNode.evaluate(args));
+        }
+        return result.toString();
     }
 
     @Override

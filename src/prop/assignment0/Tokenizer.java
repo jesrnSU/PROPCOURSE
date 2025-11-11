@@ -31,7 +31,7 @@ public class Tokenizer implements ITokenizer {
             currentLexeme = new Lexeme(currentChar, Token.EOF);
             return;
         } else if (currentChar >= '1' && currentChar <= '9') {
-            buildIntHelper(currentChar);
+            buildNumberHelper(currentChar);
             return;
         } else if (currentChar >= 'a' && currentChar <= 'z') {
             buildIdHelper(currentChar);
@@ -49,13 +49,13 @@ public class Tokenizer implements ITokenizer {
         return c;
     }
 
-    private void buildIntHelper(char c) throws IOException {
+    private void buildNumberHelper(char c) throws IOException {
         while (c >= '0' && c <= '9') {
             sb.append(c);
             scanner.moveNext();
             c = scanner.current();
         }
-        currentLexeme = new Lexeme(Integer.parseInt(sb.toString()), Token.INT_LIT);
+        currentLexeme = new Lexeme(Double.parseDouble(sb.toString()), Token.INT_LIT);
         sb.setLength(0);
     }
 

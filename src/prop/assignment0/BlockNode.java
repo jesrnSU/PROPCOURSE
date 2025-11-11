@@ -13,8 +13,7 @@ public class BlockNode implements INode{
 
     @Override
     public Object evaluate(Object[] args) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'evaluate'");
+        return statementNode.evaluate(args);
     }
 
     @Override
