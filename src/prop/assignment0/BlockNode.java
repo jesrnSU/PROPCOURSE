@@ -32,11 +32,6 @@ public class BlockNode implements INode{
         builder.append(tab + rightCurly + '\n');
     }
 
-    // @Override
-    // public String toString() {
-    //     return '\n' + leftCurly.toString() + statementNode.toString() + rightCurly.toString();
-    // }
-
     public static String tabBuilder(int tabs){
         String tabString = "";
         for(int i = 0; i < tabs; i++){

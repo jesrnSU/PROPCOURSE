@@ -44,13 +44,4 @@ public class TermNode implements INode{
             this.termNode.buildString(builder, tabs);
         } 
     }
-
-    // @Override 
-    // public String toString(){ 
-    //     if(termNode == null || operator == null){
-    //         return '\n' + factorNode.toString();
-    //     }else{
-    //         return '\n' + factorNode.toString() + operator.toString() + termNode.toString();
-    //     }
-    // }
 }

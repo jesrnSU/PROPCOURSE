@@ -40,10 +40,4 @@ public class AssignmentNode implements INode{
         expressionNode.buildString(builder, tabs + 1);
         builder.append(tab + semiSymbol.toString());
     }
-
-    // @Override
-    // public String toString() {
-    //     return '\n' + id.toString() + assignSymbol.toString() + expressionNode.toString() + semiSymbol.toString();
-    // }
-
 }

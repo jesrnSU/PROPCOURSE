@@ -37,13 +37,4 @@ public class StatementsNode implements INode{
             statementNode.buildString(builder, tabs);
         }
     }
-
-    // @Override
-    // public String toString(){
-    //     if(assignmentNode == null || statementNode == null){
-    //         return '\n' + this.getClass().getSimpleName(); 
-    //     }else{
-    //         return '\n' + assignmentNode.toString() + statementNode.toString();
-    //     }
-    // }
 }

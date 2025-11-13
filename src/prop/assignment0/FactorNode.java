@@ -46,14 +46,4 @@ public class FactorNode implements INode{
             builder.append(tabString + this.rightParen + '\n');
         }
     }
-
-    // @Override
-    // public String toString() {
-    //     if(this.factor == null){
-    //         return '\n' + leftParen.toString() + expressionNode.toString() + rightParen.toString(); 
-    //     }else{
-    //         return '\n' + factor.toString();
-    //     }
-    // }
-
 }
