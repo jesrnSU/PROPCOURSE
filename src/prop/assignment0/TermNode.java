@@ -17,8 +17,17 @@ public class TermNode implements INode{
 
     @Override
     public Object evaluate(Object[] args) throws Exception {
-        StringBuilder result = new StringBuilder(); 
-        return null;
+        Object factor = factorNode.evaluate(args);
+        if(operator != null || termNode != null){
+            if(this.operator.token().equals(Token.MULT_OP)){
+                return (double) factor * (double) termNode.evaluate(args);
+            }
+            else {
+                return (double) factor / (double) termNode.evaluate(args);
+            }
+        }else{
+            return factor;
+        }
     }
 
     @Override

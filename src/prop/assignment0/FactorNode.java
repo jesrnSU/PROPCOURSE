@@ -1,5 +1,7 @@
 package prop.assignment0;
 
+import java.util.HashMap;
+
 public class FactorNode implements INode{
     private Lexeme factor; 
     private Lexeme leftParen;
@@ -18,8 +20,15 @@ public class FactorNode implements INode{
 
     @Override
     public Object evaluate(Object[] args) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'evaluate'");
+        if(factor != null && factor.token().equals(Token.IDENT)){ 
+            @SuppressWarnings("unchecked")               
+            HashMap<Object, Double> namespace = (HashMap<Object, Double>) args[0];
+            return namespace.get(factor.value());
+        } else if(factor != null && factor.token().equals(Token.INT_LIT)){
+            return factor.value();
+        } else{
+            return expressionNode.evaluate(args);
+        }
     }
 
     @Override

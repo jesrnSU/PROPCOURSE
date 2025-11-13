@@ -1,5 +1,7 @@
 package prop.assignment0;
 
+import java.util.HashMap;
+
 public class BlockNode implements INode{
     private Lexeme leftCurly;
     private StatementsNode statementNode;
@@ -13,6 +15,9 @@ public class BlockNode implements INode{
 
     @Override
     public Object evaluate(Object[] args) throws Exception {
+        HashMap<String, Double> namespace = new HashMap<>();
+        args = new Object[1];
+        args[0] = namespace;
         return statementNode.evaluate(args);
     }
 

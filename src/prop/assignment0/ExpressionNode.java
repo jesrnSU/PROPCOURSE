@@ -19,13 +19,16 @@ public class ExpressionNode implements INode{
 
     @Override
     public Object evaluate(Object[] args) throws Exception {
-        StringBuilder result = new StringBuilder(); 
-        result.append(this.termNode.evaluate(args));
+        Object term = termNode.evaluate(args);
         if(this.operator != null && this.expressionNode != null){
-            result.append(this.operator.value());
-            result.append(this.expressionNode.evaluate(args));
+            if(this.operator.token().equals(Token.ADD_OP)){
+                return (double) term + (double) this.expressionNode.evaluate(args);
+            }else{
+                return (double) term - (double) this.expressionNode.evaluate(args);
+            } 
+        }else{
+            return term;
         }
-        return result.toString();
     }
 
     @Override
@@ -42,13 +45,4 @@ public class ExpressionNode implements INode{
             this.expressionNode.buildString(builder, tabs);
         }
     }
-
-    // @Override
-    // public String toString(){
-    //     if(operator != null || this.expressionNode != null){
-    //         return '\n' + this.termNode.toString() + this.operator.toString() + this.expressionNode.toString();
-    //     }else{
-    //         return '\n' + this.termNode.toString();
-    //     }
-    // }
 }

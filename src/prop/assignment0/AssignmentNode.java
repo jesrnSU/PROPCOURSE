@@ -1,5 +1,7 @@
 package prop.assignment0;
 
+import java.util.HashMap;
+
 public class AssignmentNode implements INode{
     private Lexeme id;
     private Lexeme assignSymbol;
@@ -16,8 +18,14 @@ public class AssignmentNode implements INode{
     @Override
     public Object evaluate(Object[] args) throws Exception {
         StringBuilder result = new StringBuilder(); 
-        result.append(this.id + " " + this.assignSymbol);
-        result.append(this.expressionNode.evaluate(args));
+        Double assignmentValue;
+        result.append(this.id.value() + " " + this.assignSymbol.value() + " ");
+        assignmentValue = (double) this.expressionNode.evaluate(args);
+        result.append(assignmentValue);
+
+        @SuppressWarnings("unchecked")
+        HashMap<Object, Double> namespace = (HashMap<Object, Double>) args[0];
+        namespace.put(this.id.value(), assignmentValue);
         return result.toString();
     }
 
