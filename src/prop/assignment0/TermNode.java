@@ -1,5 +1,7 @@
 package prop.assignment0;
 
+import java.util.ArrayDeque;
+
 public class TermNode implements INode{
     private FactorNode factorNode;
     private Lexeme operator;
@@ -17,17 +19,20 @@ public class TermNode implements INode{
 
     @Override
     public Object evaluate(Object[] args) throws Exception {
-        Object factor = factorNode.evaluate(args);
-        if(operator != null || termNode != null){
-            if(this.operator.token().equals(Token.MULT_OP)){
-                return (double) factor * (double) termNode.evaluate(args);
-            }
-            else {
-                return (double) factor / (double) termNode.evaluate(args);
-            }
+        @SuppressWarnings("unchecked")
+        ArrayDeque<Lexeme> lrHandler = (ArrayDeque<Lexeme>)args[1];
+        Lexeme factor = (Lexeme) factorNode.evaluate(args);
+
+        if(operator != null && termNode != null){
+            this.termNode.evaluate(args);
+            lrHandler.push(operator);
+            lrHandler.push(factor);
+            System.out.println("PUSHING TERM 2 : " + operator + " Factor: " + factor);
         }else{
-            return factor;
+            System.out.println("Pushing TERM : " + factor);
+            lrHandler.push(factor);
         }
+        return null;
     }
 
     @Override

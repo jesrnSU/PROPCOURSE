@@ -22,10 +22,12 @@ public class FactorNode implements INode{
     public Object evaluate(Object[] args) throws Exception {
         if(factor != null && factor.token().equals(Token.IDENT)){ 
             @SuppressWarnings("unchecked")               
-            HashMap<Object, Double> namespace = (HashMap<Object, Double>) args[0];
+            HashMap<Object, Lexeme> namespace = (HashMap<Object, Lexeme>) args[0];
+            System.out.println("Returning IDENT : " + factor);
             return namespace.get(factor.value());
         } else if(factor != null && factor.token().equals(Token.INT_LIT)){
-            return factor.value();
+            System.out.println("Returning INT : " + factor);
+            return factor;
         } else{
             return expressionNode.evaluate(args);
         }
@@ -36,8 +38,8 @@ public class FactorNode implements INode{
         String tabString = BlockNode.tabBuilder(tabs);
         tabs += 1;
         builder.append(tabString + this.getClass().getSimpleName() + '\n');
-
         tabString += '\t';
+
         if(this.factor != null){
             builder.append(tabString + this.factor + '\n');
         }else{

@@ -83,7 +83,6 @@ public class Tokenizer implements ITokenizer {
             case '*': tempToken = Token.MULT_OP; break;
             case '/': tempToken = Token.DIV_OP; break;
             
-            // Special cases
             case (char)0 : tempToken = Token.NULL; break;
             default: throw new TokenizerException("Character could not be handled correctly");
          }

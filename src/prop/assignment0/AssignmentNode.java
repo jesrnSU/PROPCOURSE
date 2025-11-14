@@ -1,5 +1,6 @@
 package prop.assignment0;
 
+import java.util.ArrayDeque;
 import java.util.HashMap;
 
 public class AssignmentNode implements INode{
@@ -18,14 +19,26 @@ public class AssignmentNode implements INode{
     @Override
     public Object evaluate(Object[] args) throws Exception {
         StringBuilder result = new StringBuilder(); 
-        Double assignmentValue;
+        args[1] = new ArrayDeque<Lexeme>(); 
+        Lexeme assignLexeme;
+
+
         result.append(this.id.value() + " " + this.assignSymbol.value() + " ");
-        assignmentValue = (double) this.expressionNode.evaluate(args);
-        result.append(assignmentValue);
+        assignLexeme = (Lexeme) this.expressionNode.evaluate(args);
+        result.append(assignLexeme.value());
 
         @SuppressWarnings("unchecked")
-        HashMap<Object, Double> namespace = (HashMap<Object, Double>) args[0];
-        namespace.put(this.id.value(), assignmentValue);
+        ArrayDeque<Lexeme> stack = (ArrayDeque<Lexeme>) args[1];
+        System.out.println("\n\n\n");
+        while (!stack.isEmpty()) {
+            System.out.println(stack.poll());
+        }
+        System.out.println("\n\n\n");
+
+        @SuppressWarnings("unchecked")
+        HashMap<Object, Lexeme> namespace = (HashMap<Object, Lexeme>) args[0];
+        System.out.println("Adding key : " + this.id + " & value : " + assignLexeme);
+        namespace.put(this.id.value(), assignLexeme);
         return result.toString();
     }
 

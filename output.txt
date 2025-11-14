@@ -13,6 +13,10 @@ LEFT_CURLY {
 					TermNode
 						FactorNode
 							INT_LIT 2.0
+						MULT_OP *
+						TermNode
+							FactorNode
+								INT_LIT 3.0
 				ADD_OP +
 				ExpressionNode
 					TermNode
@@ -77,12 +81,12 @@ LEFT_CURLY {
 						ExpressionNode
 							TermNode
 								FactorNode
-									IDENT a
+									INT_LIT 3.0
 					SEMICOLON ;
 				StatementsNode
 RIGHT_CURLY }
 
 EVALUATION:
-a = 1.8
-b = 5.2
-c = 7.0
+a = 1.0
+b = 4.0
+c = 4.0

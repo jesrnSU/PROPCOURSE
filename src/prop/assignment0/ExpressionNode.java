@@ -1,5 +1,7 @@
 package prop.assignment0;
 
+import java.util.ArrayDeque;
+
 public class ExpressionNode implements INode{
     private TermNode termNode;
     private Lexeme operator;
@@ -19,16 +21,36 @@ public class ExpressionNode implements INode{
 
     @Override
     public Object evaluate(Object[] args) throws Exception {
-        Object term = termNode.evaluate(args);
+        @SuppressWarnings("unchecked")
+        ArrayDeque<Lexeme> lrHandler = (ArrayDeque<Lexeme>)args[1];
+        termNode.evaluate(args);
+        Lexeme termResult = calculateProductAndQuotient(lrHandler);
+
         if(this.operator != null && this.expressionNode != null){
-            if(this.operator.token().equals(Token.ADD_OP)){
-                return (double) term + (double) this.expressionNode.evaluate(args);
-            }else{
-                return (double) term - (double) this.expressionNode.evaluate(args);
-            } 
+            this.expressionNode.evaluate(args);
+            lrHandler.push(this.operator);
+            lrHandler.push(termResult);
+            System.out.println("PUSHING EXPR 2 : " + operator + " Factor: " + termResult);
         }else{
-            return term;
+            System.out.println("Pushing EXPR : " + termResult);
+            lrHandler.push(termResult);
+        } 
+        return null;
+    }
+
+    private Lexeme calculateProductAndQuotient(ArrayDeque<Lexeme> queue){
+        double result = (double) queue.poll().value();
+        while(!queue.isEmpty()){
+            if(queue.peek().token().equals(Token.MULT_OP)){
+                queue.poll();
+                result *= (double) queue.poll().value(); 
+            }else{ 
+                queue.poll();
+                result /= (double) queue.poll().value();
+            }
         }
+        System.out.println("RESULT FROM PRODUCT : " + result);
+        return new Lexeme(result, Token.IDENT);
     }
 
     @Override
