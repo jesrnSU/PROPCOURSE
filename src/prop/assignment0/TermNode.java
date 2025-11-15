@@ -1,6 +1,7 @@
 package prop.assignment0;
 
 import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class TermNode implements INode{
     private FactorNode factorNode;
@@ -20,21 +21,33 @@ public class TermNode implements INode{
     @Override
     public Object evaluate(Object[] args) throws Exception {
         @SuppressWarnings("unchecked")
-        ArrayDeque<Lexeme> lrHandler = (ArrayDeque<Lexeme>)args[1];
-        Lexeme factor = (Lexeme) factorNode.evaluate(args);
+        Deque<Lexeme> lrHandler = (ArrayDeque<Lexeme>)args[1];
+        this.factorNode.evaluate(args);
 
-        if(operator != null && termNode != null){
-            this.termNode.evaluate(args);
-            lrHandler.push(operator);
-            lrHandler.push(factor);
-            System.out.println("PUSHING TERM 2 : " + operator + " Factor: " + factor);
-        }else{
-            System.out.println("Pushing TERM : " + factor);
-            lrHandler.push(factor);
-        }
-        return null;
+        if(this.operator != null && this.termNode != null){
+            lrHandler.addLast(operator);
+            this.termNode.evaluate(args); 
+        } else{
+            System.out.println("No more TERM or DIV/MUL OP");
+            double result = (double) (lrHandler.removeFirst()).value();
+            System.out.println("RESULT NOW : " + result);
+            if(lrHandler.peekFirst() != null){
+                while(lrHandler.peekFirst().token().equals(Token.MULT_OP) || lrHandler.peekFirst().token().equals(Token.DIV_OP)){
+                    if(lrHandler.removeFirst().token().equals(Token.MULT_OP)){
+                        System.out.println("MULT " + result + " * " + lrHandler.getFirst().value());
+                        result *= (double) lrHandler.removeFirst().value();
+                    }else{
+                        System.out.println("DIV " + result + " / " + lrHandler.getFirst().value());
+                        result /= (double) lrHandler.removeFirst().value();
+                    }
+                }
+            }
+            System.out.println("RESULT after Term : " + result);
+            lrHandler.addLast(new Lexeme(result, Token.INT_LIT));
+        } 
+        return null; 
     }
-
+    
     @Override
     public void buildString(StringBuilder builder, int tabs) {
         String stringTabs = BlockNode.tabBuilder(tabs);

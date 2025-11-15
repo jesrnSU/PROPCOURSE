@@ -16,7 +16,7 @@ public class BlockNode implements INode{
     @Override
     public Object evaluate(Object[] args) throws Exception {
         HashMap<Object, Lexeme> namespace = new HashMap<>();
-        args = new Object[2];
+        args = new Object[3];
         args[0] = namespace;
         return statementNode.evaluate(args);
     }

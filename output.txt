@@ -16,7 +16,7 @@ LEFT_CURLY {
 						MULT_OP *
 						TermNode
 							FactorNode
-								INT_LIT 3.0
+								INT_LIT 7.0
 				ADD_OP +
 				ExpressionNode
 					TermNode
@@ -87,6 +87,6 @@ LEFT_CURLY {
 RIGHT_CURLY }
 
 EVALUATION:
-a = 1.0
-b = 4.0
-c = 4.0
+a = 
+b = 
+c = 

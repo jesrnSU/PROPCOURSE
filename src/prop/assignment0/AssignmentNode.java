@@ -1,6 +1,7 @@
 package prop.assignment0;
 
 import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 
 public class AssignmentNode implements INode{
@@ -19,26 +20,20 @@ public class AssignmentNode implements INode{
     @Override
     public Object evaluate(Object[] args) throws Exception {
         StringBuilder result = new StringBuilder(); 
-        args[1] = new ArrayDeque<Lexeme>(); 
-        Lexeme assignLexeme;
-
+        Deque<Lexeme> leftRecursionHandler = new ArrayDeque<>();
+        Lexeme expressionResult;
+        args[1] = leftRecursionHandler;
 
         result.append(this.id.value() + " " + this.assignSymbol.value() + " ");
-        assignLexeme = (Lexeme) this.expressionNode.evaluate(args);
-        result.append(assignLexeme.value());
+        this.expressionNode.evaluate(args);
+        expressionResult = leftRecursionHandler.removeFirst();
 
-        @SuppressWarnings("unchecked")
-        ArrayDeque<Lexeme> stack = (ArrayDeque<Lexeme>) args[1];
-        System.out.println("\n\n\n");
-        while (!stack.isEmpty()) {
-            System.out.println(stack.poll());
+        result.append(expressionResult.value());
+
+        while (!leftRecursionHandler.isEmpty()) {
+           System.out.println(leftRecursionHandler.removeFirst()); 
         }
-        System.out.println("\n\n\n");
 
-        @SuppressWarnings("unchecked")
-        HashMap<Object, Lexeme> namespace = (HashMap<Object, Lexeme>) args[0];
-        System.out.println("Adding key : " + this.id + " & value : " + assignLexeme);
-        namespace.put(this.id.value(), assignLexeme);
         return result.toString();
     }
 

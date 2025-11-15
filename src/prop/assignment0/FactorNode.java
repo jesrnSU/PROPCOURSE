@@ -1,5 +1,7 @@
 package prop.assignment0;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 
 public class FactorNode implements INode{
@@ -18,19 +20,24 @@ public class FactorNode implements INode{
         this.rightParen = right;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Object evaluate(Object[] args) throws Exception {
+        Deque<Lexeme> lAssociativity = (ArrayDeque<Lexeme>) args[1];
         if(factor != null && factor.token().equals(Token.IDENT)){ 
-            @SuppressWarnings("unchecked")               
             HashMap<Object, Lexeme> namespace = (HashMap<Object, Lexeme>) args[0];
-            System.out.println("Returning IDENT : " + factor);
-            return namespace.get(factor.value());
+            Lexeme value = namespace.get(factor.value());
+            System.out.println("ADD Last " + value);
+            lAssociativity.addLast(value);
         } else if(factor != null && factor.token().equals(Token.INT_LIT)){
-            System.out.println("Returning INT : " + factor);
-            return factor;
+            System.out.println("ADD Last " + factor);
+            lAssociativity.addLast(factor); 
         } else{
-            return expressionNode.evaluate(args);
+            System.out.println("Going into (expr)");
+            expressionNode.evaluate(args);
+            System.out.println("Returning from (expr) : ");
         }
+        return null;
     }
 
     @Override
