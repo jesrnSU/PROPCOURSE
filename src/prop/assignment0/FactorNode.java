@@ -23,25 +23,34 @@ public class FactorNode implements INode{
     @SuppressWarnings("unchecked")
     @Override
     public Object evaluate(Object[] args) throws Exception {
-        Deque<Lexeme> lAssociativity = (ArrayDeque<Lexeme>) args[1];
         if(factor != null && factor.token().equals(Token.IDENT)){ 
             HashMap<Object, Lexeme> namespace = (HashMap<Object, Lexeme>) args[0];
             Lexeme value = namespace.get(factor.value());
-            System.out.println("ADD Last " + value);
-            lAssociativity.addLast(value);
+            return value;
         } else if(factor != null && factor.token().equals(Token.INT_LIT)){
-            System.out.println("ADD Last " + factor);
-            lAssociativity.addLast(factor); 
+            return factor; 
         } else{
-            System.out.println("Going into (expr)");
-            expressionNode.evaluate(args);
-            System.out.println("Returning from (expr) : ");
+            Deque<Lexeme> valueStack = new ArrayDeque<>();
+            Deque<Lexeme> operatorStack = new ArrayDeque<>();
+            Object[] innerArgs = {args[0], valueStack, operatorStack};
+
+            expressionNode.evaluate(innerArgs);
+            return calculateInnerExpression(valueStack, operatorStack);
         }
-        return null;
     }
 
-    @Override
-    public void buildString(StringBuilder builder, int tabs) {
+    private Lexeme calculateInnerExpression(Deque<Lexeme> innerValues, Deque<Lexeme> innerOperators){
+        double result = (double) innerValues.pop().value();
+        double nextVal; 
+        while(!innerValues.isEmpty()){
+            char op = (char) innerOperators.pop().value();
+            nextVal = (double) innerValues.pop().value();
+            result = op == '+' ? (result + nextVal) : (result - nextVal); 
+        }
+        return new Lexeme(result, Token.INT_LIT);
+    }
+
+    @Override public void buildString(StringBuilder builder, int tabs) {
         String tabString = BlockNode.tabBuilder(tabs);
         tabs += 1;
         builder.append(tabString + this.getClass().getSimpleName() + '\n');

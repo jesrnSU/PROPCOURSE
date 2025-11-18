@@ -3,6 +3,7 @@ package prop.assignment0;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class AssignmentNode implements INode{
     private Lexeme id;
@@ -17,24 +18,26 @@ public class AssignmentNode implements INode{
         this.semiSymbol = semi;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Object evaluate(Object[] args) throws Exception {
-        StringBuilder result = new StringBuilder(); 
-        Deque<Lexeme> leftRecursionHandler = new ArrayDeque<>();
-        Lexeme expressionResult;
-        args[1] = leftRecursionHandler;
+        HashMap<Object, Lexeme> namespace = (HashMap<Object, Lexeme>)args[0];
+        StringBuilder resultString = new StringBuilder(); 
+        Deque<Lexeme> valuesStack = new ArrayDeque<>();
+        Deque<Lexeme> operatorStack = new ArrayDeque<>();
+        args[1] = valuesStack;
+        args[2] = operatorStack;
 
-        result.append(this.id.value() + " " + this.assignSymbol.value() + " ");
+        resultString.append(this.id.value() + " " + this.assignSymbol.value());
         this.expressionNode.evaluate(args);
-        expressionResult = leftRecursionHandler.removeFirst();
 
-        result.append(expressionResult.value());
-
-        while (!leftRecursionHandler.isEmpty()) {
-           System.out.println(leftRecursionHandler.removeFirst()); 
+        double resultValue = (double) valuesStack.pop().value();
+        while (!valuesStack.isEmpty()) {
+            double nextVal = (double) valuesStack.pop().value();
+            resultValue = operatorStack.pop().token().equals(Token.ADD_OP) ? (resultValue + nextVal) : (resultValue - nextVal); 
         }
-
-        return result.toString();
+        namespace.put(id.value(), new Lexeme(resultValue, Token.INT_LIT));
+        return resultString.append(String.format(" %.1f", resultValue));
     }
 
     @Override

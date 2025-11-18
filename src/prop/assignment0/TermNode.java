@@ -18,36 +18,34 @@ public class TermNode implements INode{
         this.termNode = termNode;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Object evaluate(Object[] args) throws Exception {
-        @SuppressWarnings("unchecked")
-        Deque<Lexeme> lrHandler = (ArrayDeque<Lexeme>)args[1];
-        this.factorNode.evaluate(args);
+        Deque<Lexeme> valueStack = (ArrayDeque<Lexeme>)args[1];
+        Deque<Lexeme> operatorStack = (ArrayDeque<Lexeme>)args[2];
+        Lexeme factor = (Lexeme) this.factorNode.evaluate(args);
+        valueStack.push(factor);
 
-        if(this.operator != null && this.termNode != null){
-            lrHandler.addLast(operator);
-            this.termNode.evaluate(args); 
-        } else{
-            System.out.println("No more TERM or DIV/MUL OP");
-            double result = (double) (lrHandler.removeFirst()).value();
-            System.out.println("RESULT NOW : " + result);
-            if(lrHandler.peekFirst() != null){
-                while(lrHandler.peekFirst().token().equals(Token.MULT_OP) || lrHandler.peekFirst().token().equals(Token.DIV_OP)){
-                    if(lrHandler.removeFirst().token().equals(Token.MULT_OP)){
-                        System.out.println("MULT " + result + " * " + lrHandler.getFirst().value());
-                        result *= (double) lrHandler.removeFirst().value();
-                    }else{
-                        System.out.println("DIV " + result + " / " + lrHandler.getFirst().value());
-                        result /= (double) lrHandler.removeFirst().value();
-                    }
-                }
-            }
-            System.out.println("RESULT after Term : " + result);
-            lrHandler.addLast(new Lexeme(result, Token.INT_LIT));
-        } 
-        return null; 
+        if(this.operator == null || this.termNode == null){
+            factor = precedenceResult(valueStack, operatorStack);
+        }else{
+            operatorStack.push(this.operator);
+            return this.termNode.evaluate(args); 
+        }
+        return factor;
     }
-    
+
+    private Lexeme precedenceResult(Deque<Lexeme> valueStack, Deque<Lexeme> operatorStack) {
+        double result = (double) valueStack.removeLast().value();
+        double nextVal;
+        while (!valueStack.isEmpty()) {
+            char op = (char) operatorStack.pop().value();
+            nextVal = (double) valueStack.removeLast().value();
+            result = op == '*' ? (result * nextVal) : (result / nextVal);
+        }
+        return new Lexeme(result, Token.INT_LIT);
+    }
+
     @Override
     public void buildString(StringBuilder builder, int tabs) {
         String stringTabs = BlockNode.tabBuilder(tabs);
