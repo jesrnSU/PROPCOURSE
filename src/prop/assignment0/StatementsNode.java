@@ -29,8 +29,8 @@ public class StatementsNode implements INode{
     public void buildString(StringBuilder builder, int tabs) {
         String tab = BlockNode.tabBuilder(tabs);
         tabs += 1;
-
         builder.append(tab + this.getClass().getSimpleName() + '\n');
+        
         if(assignmentNode != null && statementNode != null){
             assignmentNode.buildString(builder, tabs);
             builder.append('\n');

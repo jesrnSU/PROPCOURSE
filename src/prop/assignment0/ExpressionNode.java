@@ -39,7 +39,6 @@ public class ExpressionNode implements INode{
     public void buildString(StringBuilder builder, int tabs) {
         String stringTabs = BlockNode.tabBuilder(tabs);
         tabs += 1;
-
         builder.append(stringTabs + this.getClass().getSimpleName() + '\n');
         stringTabs += '\t';
 

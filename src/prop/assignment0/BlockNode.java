@@ -24,7 +24,6 @@ public class BlockNode implements INode{
     @Override
     public void buildString(StringBuilder builder, int tabs) {
         String tab = tabBuilder(tabs);
-
         builder.append(tab + this.getClass().getSimpleName() + '\n');
         builder.append(tab + leftCurly + '\n');
         if(statementNode != null)

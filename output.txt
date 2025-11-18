@@ -83,6 +83,6 @@ LEFT_CURLY {
 RIGHT_CURLY }
 
 EVALUATION:
-a = 1,8
-b = -0,2
-c = 1,6
+a = 1.8
+b = -0.2
+c = 1.6

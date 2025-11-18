@@ -3,7 +3,7 @@ package prop.assignment0;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Locale;
 
 public class AssignmentNode implements INode{
     private Lexeme id;
@@ -37,16 +37,16 @@ public class AssignmentNode implements INode{
             resultValue = operatorStack.pop().token().equals(Token.ADD_OP) ? (resultValue + nextVal) : (resultValue - nextVal); 
         }
         namespace.put(id.value(), new Lexeme(resultValue, Token.INT_LIT));
-        return resultString.append(String.format(" %.1f", resultValue));
+        return resultString.append(String.format(Locale.US, " %.1f", resultValue));
     }
 
     @Override
     public void buildString(StringBuilder builder, int tabs) {
         String tab = BlockNode.tabBuilder(tabs);
         builder.append(tab + this.getClass().getSimpleName() + '\n');
-
         tab += '\t';
         builder.append(tab + id.toString() + '\n'); 
+        
         builder.append(tab + assignSymbol.toString() + '\n');
         expressionNode.buildString(builder, tabs + 1);
         builder.append(tab + semiSymbol.toString());
