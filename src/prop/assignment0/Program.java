@@ -28,13 +28,13 @@ public class Program {
 				root.buildString(builder, 0);
 				builder.append("\nEVALUATION:\n");
 				builder.append(root.evaluate(null));
+
 				stream = new FileOutputStream(outputFileName);
 				writer = new OutputStreamWriter(stream);
 				writer.write(builder.toString());
 			}
 			catch (Exception exception) {
 				System.out.println("EXCEPTION: " + exception);
-				exception.printStackTrace();
 			}
 			finally {
 				if (parser != null)

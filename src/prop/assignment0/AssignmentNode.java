@@ -46,7 +46,6 @@ public class AssignmentNode implements INode{
         builder.append(tab + this.getClass().getSimpleName() + '\n');
         tab += '\t';
         builder.append(tab + id.toString() + '\n'); 
-        
         builder.append(tab + assignSymbol.toString() + '\n');
         expressionNode.buildString(builder, tabs + 1);
         builder.append(tab + semiSymbol.toString());
