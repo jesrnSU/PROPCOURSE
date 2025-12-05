@@ -17,13 +17,16 @@
 
     Note: I tried to implement this with the module design pattern but was unsuccessful, is it possible? I felt like all my tried solutions
     had some kind of performance or accessibility issue and fixing that issue just created another one. 
+    
+    Note2: I could have moved the shared functions outside the createClass function for maximum performance. All classes would then share these.
+    I was not sure if it was allowed since I thought you maybe only wanted one function "createClass".
 */
 function createClass(className, superClassList){
     // Have to keep in mind that if an user sends in an array with superclasses, they can still access that array and modify it
     // slice() will copy the array to a new object while keeping the actual class objects. 
     const supers = (superClassList == null) ? [] : superClassList.slice(); 
 
-    // Shared functions for all "actual" Objects
+    // Functions for each class. 
     function sharedCall(funcName, ...parameters){ 
         let foundFunc = dfsFunction(this._proto, funcName);
 
@@ -39,9 +42,8 @@ function createClass(className, superClassList){
         var foundFunc = null;
 
         currentClass._supers(function(superClass){
-            if(foundFunc === null){
-                foundFunc = dfsFunction(superClass, funcName)
-            }
+            foundFunc = dfsFunction(superClass, funcName)
+            return foundFunc !== null;
         });
         return foundFunc;
     }
@@ -83,7 +85,9 @@ function createClass(className, superClassList){
         value(callback){
             let nrSupers = supers.length;
             for(let i = 0; i < nrSupers; i++){
-                callback(supers[i]);
+                var stopLoop = callback(supers[i]);
+                if(stopLoop) 
+                    return;
             }
         }, 
         writable: false,

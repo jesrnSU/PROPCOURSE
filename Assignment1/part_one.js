@@ -3,16 +3,8 @@
 */
 
 const myObject = {
-    create(propotypeList){
-        var obj = {};
-        obj.__proto__ = (propotypeList == null) ? [] : propotypeList;
-        obj.create = this.create;
-        obj.call = this.call;
-        obj.addPrototype = this.addPrototype;
-        return obj;
-    },
-
-    call(funcName, parameters){
+    
+    call: function(funcName, parameters){
         function _dfs(current){
             if(current[funcName] instanceof Function){
                 return current[funcName](parameters);
@@ -24,14 +16,13 @@ const myObject = {
                 }
             }
         };
-
         var foundFunction = _dfs(this);
         if(foundFunction)
             return foundFunction;
         throw new Error("No function found");
     },
 
-    addPrototype(prototype){
+    create: function(propotypeList) {
         function _circularInheritanceChecker(self, currentPrototype){
             if(self === currentPrototype){
                 throw new Error("CIRCULAR ERROR");
@@ -41,12 +32,20 @@ const myObject = {
                 }
             }
         };
-        _circularInheritanceChecker(this, prototype);
+        
+        return { 
+            addPrototype(prototype){
+                _circularInheritanceChecker(this, prototype);
 
-        if(this.__proto__ == null){
-            this.__proto__ = [prototype];
-        }else{
-            this.__proto__.push(prototype);
-        };
-    },
+                if(this.__proto__ == null){
+                    this.__proto__ = [prototype];
+                }else{
+                    this.__proto__.push(prototype);
+                }
+            }, 
+            __proto__: (propotypeList == null) ? [] : propotypeList,
+            create: myObject.create,
+            call: myObject.call,
+        }
+    }
 }
